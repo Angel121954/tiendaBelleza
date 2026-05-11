@@ -1,237 +1,177 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/layout/Footer";
-import { benefitPills } from "../data/treatments";
+import { getTreatments } from "../api/treatments";
+import { benefitPills as localBenefitPills } from "../data/treatments";
+
+const gradients = [
+  'linear-gradient(135deg, var(--pink-light), var(--teal-light))',
+  'linear-gradient(135deg, var(--teal-light), var(--pink-light))',
+];
+
+const fallbackPills = localBenefitPills.map((b, i) => ({
+  ...b,
+  gradient: gradients[i % gradients.length],
+}));
 
 export default function Benefits() {
-  const [active, setActive] = useState("hidratacion");
+  const [active, setActive] = useState("");
+  const [benefitPills, setBenefitPills] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let mounted = true;
+    getTreatments()
+      .then((items) => {
+        if (!mounted) return;
+        const pills = items.map((t, i) => ({
+          id: t.id,
+          label: t.name?.split(' ')[0] || t.cat,
+          title: t.name,
+          time: t.dur || '60 min',
+          price: t.price ? `Desde ${t.price}` : '',
+          desc: t.shortDesc || '',
+          benefits: t.benefits || [],
+          ideal: typeof t.ideal === 'string' ? [t.ideal] : (t.ideal || []),
+          steps: t.steps || [],
+          gradient: gradients[i % gradients.length],
+        }));
+        setBenefitPills(pills);
+        if (!mounted) return;
+        setActive(pills[0]?.id || '');
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setBenefitPills(fallbackPills);
+        setActive(fallbackPills[0]?.id || '');
+      })
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
+  }, []);
 
   const current = benefitPills.find((b) => b.id === active);
 
   return (
     <main>
-      {/* HEADER */}
-      <div
-        style={{
-          position: "relative",
-          minHeight: 240,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          overflow: "hidden",
-          padding: "60px 40px",
-        }}
-      >
+      <div style={{ position: "relative", minHeight: 250, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", overflow: "hidden", padding: "64px 40px" }}>
         <img
           src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=1400&q=85&fit=crop"
           alt="Beneficios capilares"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
         />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(135deg, rgba(77,191,191,0.65) 0%, rgba(61,32,53,0.78) 100%)",
-          }}
-        />
-        <div style={{ position: "relative", zIndex: 2 }}>
-          <span
-            className="tag"
-            style={{ color: "#7ee8e8", display: "block", marginBottom: 8 }}
-          >
-            Por qué elegirnos
-          </span>
-          <h1
-            className="serif"
-            style={{ fontSize: 44, fontWeight: 400, color: "#fff" }}
-          >
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(77,191,191,0.65) 0%, rgba(61,32,53,0.78) 100%)" }} />
+        <div style={{ position: "relative", zIndex: 2, maxWidth: 560 }}>
+          <span className="tag" style={{ color: "#7ee8e8", display: "block", marginBottom: 10 }}>Por qué elegirnos</span>
+          <h1 className="serif" style={{ fontSize: 46, fontWeight: 400, color: "#fff", marginBottom: 14 }}>
             Beneficios de nuestros tratamientos
           </h1>
-          <p
-            style={{
-              fontSize: 14,
-              color: "rgba(255,255,255,0.85)",
-              marginTop: 10,
-              fontWeight: 600,
-              maxWidth: 480,
-              margin: "10px auto 0",
-            }}
-          >
-            Selecciona un tratamiento para conocer en detalle sus beneficios y
-            cómo funciona.
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", fontWeight: 600, lineHeight: 1.7 }}>
+            Selecciona un tratamiento para conocer en detalle sus beneficios y cómo funciona.
           </p>
         </div>
       </div>
 
-      {/* PILLS */}
-      <div
-        style={{
-          display: "flex",
-          gap: 10,
-          flexWrap: "wrap",
-          padding: "28px 40px 0",
-          justifyContent: "center",
-        }}
-      >
-        {benefitPills.map((b) => (
-          <button
-            key={b.id}
-            className={`bpill${active === b.id ? " on" : ""}`}
-            onClick={() => setActive(b.id)}
-          >
-            {b.label}
-          </button>
-        ))}
-      </div>
-
-      {/* PANEL */}
-      {current && (
-        <div className="sec" style={{ maxWidth: 900, margin: "0 auto" }}>
-          {/* HERO CARD */}
-          <div
-            style={{
-              background: current.gradient,
-              borderRadius: 18,
-              padding: 32,
-              textAlign: "center",
-              marginBottom: 24,
-            }}
-          >
-            <div style={{ fontSize: 64, marginBottom: 12 }}>
-              {current.label.split(" ")[0]}
-            </div>
-            <h2
-              className="serif"
-              style={{ fontSize: 28, fontWeight: 400, marginBottom: 8 }}
-            >
-              {current.title}
-            </h2>
-            <span className="tag">
-              {current.time} · {current.price}
-            </span>
-            <p
-              style={{
-                fontSize: 14,
-                color: "var(--muted)",
-                lineHeight: 1.7,
-                marginTop: 14,
-                maxWidth: 540,
-                marginLeft: "auto",
-                marginRight: "auto",
-                fontWeight: 600,
-              }}
-            >
-              {current.desc}
-            </p>
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "70px 0", color: "var(--muted)" }}>
+          <p style={{ fontWeight: 700, fontSize: 15 }}>Cargando...</p>
+        </div>
+      ) : (
+        <>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", padding: "32px 40px 0", justifyContent: "center" }}>
+            {benefitPills.map((b) => (
+              <button key={b.id} className={`bpill${active === b.id ? " on" : ""}`} onClick={() => setActive(b.id)}>
+                {b.label}
+              </button>
+            ))}
           </div>
 
-          {/* DETAILS GRID */}
-          <div className="grid-2-col" style={{ gap: 16 }}>
-            {/* Beneficios */}
-            <div
-              style={{
-                background: "#fff",
-                border: "1.5px solid var(--border)",
-                borderRadius: 18,
-                padding: 24,
-              }}
-            >
-              <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 14 }}>
-                Beneficios
-              </p>
-              {current.benefits.map((b, i) => (
-                <div key={i} className="check-item">
-                  <span>✓</span>
-                  <span>{b}</span>
+          {current && (
+            <div className="sec" style={{ maxWidth: 920, margin: "0 auto" }}>
+              <div style={{ background: current.gradient, borderRadius: 20, padding: "36px 32px", textAlign: "center", marginBottom: 24 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: "var(--pink)" }}>
+                  <LeafIcon size={52} />
                 </div>
-              ))}
-            </div>
-
-            {/* Ideal para + pasos */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div
-                style={{
-                  background: "#fff",
-                  border: "1.5px solid var(--border)",
-                  borderRadius: 18,
-                  padding: 24,
-                }}
-              >
-                <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 12 }}>
-                  ¿Para quién es ideal?
+                <h2 className="serif" style={{ fontSize: 30, fontWeight: 400, marginBottom: 8 }}>{current.title}</h2>
+                <span className="tag">{current.time} · {current.price}</span>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.75, marginTop: 16, maxWidth: 540, marginLeft: "auto", marginRight: "auto", fontWeight: 600 }}>
+                  <span dangerouslySetInnerHTML={{ __html: current.desc }} />
                 </p>
-                {current.ideal.map((item, i) => (
-                  <div key={i} className="check-item">
-                    <span style={{ color: "var(--pink)" }}>→</span>
-                    <span>{item}</span>
-                  </div>
-                ))}
               </div>
 
-              <div
-                style={{
-                  background: "#fff",
-                  border: "1.5px solid var(--border)",
-                  borderRadius: 18,
-                  padding: 24,
-                }}
-              >
-                <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 14 }}>
-                  ¿Cómo funciona?
-                </p>
-                <div
-                  style={{ display: "flex", flexDirection: "column", gap: 12 }}
-                >
-                  {current.steps.map((step, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        display: "flex",
-                        gap: 12,
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <div className="step-num">{i + 1}</div>
-                      <p
-                        style={{
-                          fontSize: 13,
-                          color: "var(--muted)",
-                          lineHeight: 1.6,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {step}
-                      </p>
+              <div className="grid-2-col" style={{ gap: 18 }}>
+                <div style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 26 }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--dark)" }}>Beneficios</p>
+                  {current.benefits.map((b, i) => (
+                    <div key={i} className="check-item">
+                      <span><CheckIcon /></span>
+                      <span>{b}</span>
                     </div>
                   ))}
                 </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                  <div style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 26 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 14, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--dark)" }}>Para quién es ideal</p>
+                    {current.ideal.map((item, i) => (
+                      <div key={i} className="check-item">
+                        <span style={{ color: "var(--pink)" }}><ArrowIcon /></span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 26 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--dark)" }}>Cómo funciona</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+                      {current.steps.map((step, i) => (
+                        <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                          <div className="step-num">{i + 1}</div>
+                          <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65, fontWeight: 600 }}>{step}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ textAlign: "center", marginTop: 32 }}>
+                <button className="btn-primary" style={{ padding: "14px 40px", fontSize: 14 }} onClick={() => navigate("/agendar")}>
+                  Agendar ahora
+                </button>
               </div>
             </div>
-          </div>
-
-          {/* CTA */}
-          <div style={{ textAlign: "center", marginTop: 28 }}>
-            <button
-              className="btn-primary"
-              style={{ padding: "13px 36px", fontSize: 14 }}
-              onClick={() => navigate("/agendar")}
-            >
-              Agendar ahora
-            </button>
-          </div>
-        </div>
+          )}
+        </>
       )}
 
       <Footer />
     </main>
+  );
+}
+
+function LeafIcon({ size }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 8C8 10 5.9 16.17 3.82 19.96c.19-.07.37-.14.55-.22C6 18.86 7.5 18 9 18c3 0 5-2 8-2s5 .5 7 2c0-9-4-12-7-10z" />
+      <path d="M3 22c0-4 2-8 6-10" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
   );
 }

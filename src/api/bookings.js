@@ -1,15 +1,20 @@
-// api/bookings.js
-// Integración futura con backend de citas (ej: Google Calendar API, Calendly, o backend propio)
+const WP_BASE = import.meta.env.VITE_WP_URL;
 
 export async function createBooking(data) {
-  // TODO: Conectar con backend real
-  // Por ahora simula un POST exitoso
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ success: true, id: Date.now(), ...data }), 800);
+  const res = await fetch(`${WP_BASE}/wp-json/poder-capilar/v1/bookings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
   });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `Error al reservar: ${res.status}`);
+  }
+  return res.json();
 }
 
 export async function getAvailableSlots(date) {
-  // TODO: Consultar disponibilidad real por fecha
-  return ['8:00 am', '9:00 am', '11:00 am', '2:00 pm', '3:00 pm', '4:00 pm'];
+  const res = await fetch(`${WP_BASE}/wp-json/poder-capilar/v1/bookings/slots?date=${encodeURIComponent(date)}`);
+  if (!res.ok) throw new Error(`Error al obtener horarios: ${res.status}`);
+  return res.json();
 }
