@@ -29,15 +29,13 @@ export default function Booking() {
   const [treatment, setTreatment] = useState("");
   const [form, setForm] = useState({ name: "", email: "", phone: "", notes: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [treatments, setTreatments] = useState(localTreatments);
+  const [treatments, setTreatments] = useState([]);
   const [slots, setSlots] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getTreatments().then((data) => {
-      if (data.length > 0) setTreatments(data);
-    }).catch(() => {});
+    getTreatments().then(setTreatments).catch(() => {});
   }, []);
 
   useEffect(() => {
