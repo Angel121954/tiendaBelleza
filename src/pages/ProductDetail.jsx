@@ -34,8 +34,17 @@ export default function ProductDetail() {
   if (loading) {
     return (
       <main>
-        <div style={{ padding: "80px 40px", textAlign: "center", color: "var(--muted)" }}>
-          <p style={{ fontWeight: 700, fontSize: 15 }}>Cargando producto...</p>
+        <div className="sec">
+          <div className="grid-2-col" style={{ gap: 40, alignItems: "start" }}>
+            <div className="skeleton" style={{ width: "100%", aspectRatio: "1/1", borderRadius: 20 }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div className="skeleton" style={{ height: 14, width: "30%" }} />
+              <div className="skeleton" style={{ height: 26, width: "70%" }} />
+              <div className="skeleton" style={{ height: 14, width: "50%" }} />
+              <div className="skeleton" style={{ height: 40, width: "40%", marginTop: 10 }} />
+              <div className="skeleton" style={{ height: 48, width: "100%", marginTop: 10 }} />
+            </div>
+          </div>
         </div>
         <Footer />
       </main>

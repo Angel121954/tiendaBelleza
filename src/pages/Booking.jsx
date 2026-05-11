@@ -31,6 +31,7 @@ export default function Booking() {
   const [submitted, setSubmitted] = useState(false);
   const [treatments, setTreatments] = useState([]);
   const [slots, setSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -40,10 +41,13 @@ export default function Booking() {
 
   useEffect(() => {
     if (!selDay || !month || !year) return;
+    setLoadingSlots(true);
+    setSelSlot(null);
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(selDay).padStart(2, '0')}`;
     getAvailableSlots(dateStr)
       .then((data) => setSlots(Array.isArray(data) ? data : []))
-      .catch(() => setSlots([]));
+      .catch(() => setSlots([]))
+      .finally(() => setLoadingSlots(false));
   }, [selDay, month, year]);
 
   const cells = buildCalendar(year, month);
@@ -140,12 +144,16 @@ export default function Booking() {
                   Horarios disponibles — {selDay} de {MONTH_NAMES[month]}
                 </p>
                 <div className="ts">
-                  {slots.length > 0 ? slots.map((s) => (
+                  {loadingSlots ? (
+                    [1,2,3,4,5,6].map((i) => (
+                      <div key={i} className="skeleton" style={{ height: 38, borderRadius: 50 }} />
+                    ))
+                  ) : slots.length > 0 ? slots.map((s) => (
                     <div key={s.t} className={`slot${s.off ? " off" : ""}${selSlot === s.t ? " on" : ""}`} onClick={() => !s.off && setSelSlot(s.t)}>
                       {s.t}
                     </div>
                   )) : (
-                    <p style={{ fontSize: 12, color: "var(--muted)" }}>Cargando horarios...</p>
+                    <p style={{ fontSize: 12, color: "var(--muted)", gridColumn: "1 / -1", textAlign: "center" }}>No hay horarios disponibles</p>
                   )}
                 </div>
               </div>

@@ -3,9 +3,9 @@ import { sendContactMessage } from "../api/contact";
 import Footer from "../components/layout/Footer";
 
 const INFO_CARDS = [
-  { title: "Ubicación",    desc: "Cali, Colombia",                           bg: "var(--pink-light)" },
+  { title: "Ubicación",    desc: "Cartago, Colombia",                           bg: "var(--pink-light)" },
   { title: "WhatsApp",     desc: "+57 310 422 6967 · Lun-Sáb 8am-6pm",      bg: "var(--teal-light)" },
-  { title: "Instagram",    desc: "@luisaayslin.accesorios",                   bg: "var(--pink-light)" },
+  { title: "Instagram",    desc: "@podercapilar",                   bg: "var(--pink-light)" },
   { title: "Nuestro lema", desc: "Hecho a mano · Con amor · Vuelve pronto",  bg: "var(--teal-light)" },
 ];
 
@@ -42,8 +42,6 @@ export default function Contact() {
       <div className="sec">
         <div className="grid-2-col" style={{ gap: 34 }}>
           <div style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 30 }}>
-            <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 24 }}>Envíanos un mensaje</p>
-
             {sent ? (
               <div style={{ textAlign: "center", padding: "48px 0" }}>
                 <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--pink-light)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", color: "var(--pink)" }}>
@@ -92,7 +90,7 @@ export default function Contact() {
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 26, marginBottom: 4 }}>
               <p className="serif" style={{ fontSize: 20, fontWeight: 400, marginBottom: 8 }}>
-                Luisa &amp; <span style={{ color: "var(--teal)" }}>Ayslin</span>
+                Poder <span style={{ color: "var(--teal)" }}>Capilar</span>
               </p>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.75, fontWeight: 600 }}>
                 Especialistas en cuidado capilar natural con más de 3 años transformando el cabello de nuestras clientas con amor y dedicación.

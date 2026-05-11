@@ -73,8 +73,18 @@ export default function Benefits() {
       </div>
 
       {loading ? (
-        <div style={{ textAlign: "center", padding: "70px 0", color: "var(--muted)" }}>
-          <p style={{ fontWeight: 700, fontSize: 15 }}>Cargando...</p>
+        <div style={{ padding: "32px 40px" }}>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 30 }}>
+            {[1,2,3,4].map((i) => (
+              <div key={i} className="skeleton" style={{ height: 34, width: 100, borderRadius: 50 }} />
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div className="skeleton" style={{ height: 22, width: "40%" }} />
+            <div className="skeleton" style={{ height: 14, width: "80%" }} />
+            <div className="skeleton" style={{ height: 14, width: "60%" }} />
+            <div className="skeleton" style={{ height: 200, width: "100%", marginTop: 10 }} />
+          </div>
         </div>
       ) : (
         <>

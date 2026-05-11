@@ -1,9 +1,16 @@
+import { getCached, setCache } from './cache';
+
 const WP_BASE = import.meta.env.VITE_WP_URL;
 
 async function apiFetch(endpoint) {
-  const res = await fetch(`${WP_BASE}/wp-json/poder-capilar/v1/${endpoint}`);
+  const url = `${WP_BASE}/wp-json/poder-capilar/v1/${endpoint}`;
+  const cached = getCached(url);
+  if (cached) return cached;
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`API error: ${res.status} ${res.statusText}`);
-  return res.json();
+  const data = await res.json();
+  setCache(url, data);
+  return data;
 }
 
 export async function getTreatments(category = 'todos') {

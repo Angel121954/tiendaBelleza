@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import logoLuisaAyslin from "../../assets/logoLuisaAyslin.png";
+import logoSrc from "../../assets/logoLuisaAyslin.png";
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -50,8 +50,8 @@ export default function Navbar() {
         {/* LOGO */}
         <Link to="/" style={{ display: "flex", alignItems: "center" }}>
           <img
-            src={logoLuisaAyslin}
-            alt="Luisa & Ayslin"
+            src={logoSrc}
+            alt="Poder Capilar"
             style={{ height: 50, width: "auto", objectFit: "contain" }}
           />
         </Link>

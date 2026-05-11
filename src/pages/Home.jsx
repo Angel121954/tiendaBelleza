@@ -159,7 +159,7 @@ export default function Home() {
           {[
             { text: "Mi cabello quedó increíble. Suave y brillante desde la primera sesión. Las chicas de Poder Capilar son lo máximo.", name: "Valentina R.", city: "Cali", initials: "VR", color: "var(--pink)" },
             { text: "Hice 3 sesiones de reconstrucción y el cambio es impresionante. 100% recomendado, se nota el amor con que trabajan.", name: "Camila M.", city: "Palmira", initials: "CM", color: "var(--teal)" },
-            { text: "En dos meses noté mucho más cabello y más fuerte. La atención es súper personalizada y amorosa.", name: "Luisa T.", city: "Cali", initials: "LT", color: "var(--pink)" },
+            { text: "En dos meses noté mucho más cabello y más fuerte. La atención es súper personalizada y amorosa.", name: "María F.", city: "Cali", initials: "MF", color: "var(--pink)" },
           ].map((t) => (
             <div key={t.name} style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 26, boxShadow: "0 4px 24px rgba(61,32,53,0.06)" }}>
               <div style={{ display: "flex", gap: 2, color: "#f59e0b", marginBottom: 12 }}>

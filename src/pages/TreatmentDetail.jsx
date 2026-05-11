@@ -23,8 +23,17 @@ export default function TreatmentDetail() {
   if (loading) {
     return (
       <main>
-        <div style={{ padding: "80px 40px", textAlign: "center", color: "var(--muted)" }}>
-          <p style={{ fontWeight: 700, fontSize: 15 }}>Cargando tratamiento...</p>
+        <div className="sec">
+          <div className="grid-2-col" style={{ gap: 40, alignItems: "start" }}>
+            <div className="skeleton" style={{ width: "100%", aspectRatio: "1/1", borderRadius: 20 }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div className="skeleton" style={{ height: 14, width: "30%" }} />
+              <div className="skeleton" style={{ height: 26, width: "70%" }} />
+              <div className="skeleton" style={{ height: 14, width: "90%" }} />
+              <div className="skeleton" style={{ height: 14, width: "60%" }} />
+              <div className="skeleton" style={{ height: 20, width: "40%", marginTop: 10 }} />
+            </div>
+          </div>
         </div>
         <Footer />
       </main>

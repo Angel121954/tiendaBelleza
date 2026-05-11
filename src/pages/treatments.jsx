@@ -44,8 +44,17 @@ export default function Treatments() {
         </div>
 
         {loading ? (
-          <div style={{ textAlign: "center", padding: "70px 0", color: "var(--muted)" }}>
-            <p style={{ fontWeight: 700, fontSize: 15 }}>Cargando tratamientos...</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {[1,2,3,4].map((i) => (
+              <div key={i} className="card" style={{ display: "flex", gap: 16, padding: 16 }}>
+                <div className="skeleton" style={{ width: 100, height: 100, borderRadius: 12, flexShrink: 0 }} />
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8, justifyContent: "center" }}>
+                  <div className="skeleton" style={{ height: 12, width: "30%" }} />
+                  <div className="skeleton" style={{ height: 16, width: "60%" }} />
+                  <div className="skeleton" style={{ height: 12, width: "90%" }} />
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

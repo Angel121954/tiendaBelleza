@@ -1,3 +1,4 @@
+const APP_URL = import.meta.env.VITE_APP_URL || "podercapilar.com";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -10,10 +11,34 @@ export default function Cart() {
   const [ordering, setOrdering] = useState(false);
   const [orderDone, setOrderDone] = useState(false);
   const [orderError, setOrderError] = useState("");
+  const [showNequi, setShowNequi] = useState(false);
+  const NEQUI = "3104226967";
+  const NEQUI_NAME = "Poder Capilar";
 
   const fmt = (n) => `$${n.toLocaleString("es-CO")}`;
 
-  const handleCheckout = async () => {
+  const whatsappMsg = () => {
+    const lines = items.map(
+      (i, idx) =>
+        `${idx + 1}. ${i.name} x${i.qty} — ${fmt(i.priceNum * i.qty)}`,
+    );
+    const msg = [
+      `¡Hola! Acabo de visualizar tu sitio web ${APP_URL} y me gustaría hacer un pedido:`,
+      "",
+      ...lines,
+      "",
+      `Total: ${fmt(total)}`,
+      "",
+      "Gracias, quedo atento a la confirmación.",
+    ].join("\n");
+    return encodeURIComponent(msg);
+  };
+
+  const handleCheckout = () => {
+    setShowNequi(true);
+  };
+
+  const handleNequiConfirm = async () => {
     setOrdering(true);
     setOrderError("");
     try {
@@ -22,15 +47,17 @@ export default function Cart() {
         quantity: i.qty,
       }));
       await createOrder({
-        payment_method: "cod",
-        payment_method_title: "Pago contra entrega",
+        payment_method: "nequi",
+        payment_method_title: "Nequi",
         set_paid: false,
         line_items: lineItems,
       });
       setOrderDone(true);
       clearCart();
     } catch (err) {
-      setOrderError(err.message || "Error al procesar el pedido. Intenta de nuevo.");
+      setOrderError(
+        err.message || "Error al procesar el pedido. Intenta de nuevo.",
+      );
     } finally {
       setOrdering(false);
     }
@@ -39,15 +66,51 @@ export default function Cart() {
   if (orderDone) {
     return (
       <main>
-        <div style={{ minHeight: "58vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 40 }}>
-          <div style={{ width: 80, height: 80, borderRadius: "50%", background: "var(--teal-light)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, color: "var(--teal)" }}>
+        <div
+          style={{
+            minHeight: "58vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: 40,
+          }}
+        >
+          <div
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              background: "var(--teal-light)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 24,
+              color: "var(--teal)",
+            }}
+          >
             <CheckCircleIcon size={40} />
           </div>
-          <h2 className="serif" style={{ fontSize: 28, marginBottom: 10 }}>Pedido confirmado</h2>
-          <p style={{ fontSize: 14, color: "var(--muted)", fontWeight: 600, marginBottom: 26, maxWidth: 400, lineHeight: 1.7 }}>
-            Recibirás un correo con los detalles de tu compra. Te contactaremos para coordinar la entrega.
+          <h2 className="serif" style={{ fontSize: 28, marginBottom: 10 }}>
+            Pedido confirmado
+          </h2>
+          <p
+            style={{
+              fontSize: 14,
+              color: "var(--muted)",
+              fontWeight: 600,
+              marginBottom: 26,
+              maxWidth: 400,
+              lineHeight: 1.7,
+            }}
+          >
+            Recibirás un correo con los detalles de tu compra. Te contactaremos
+            para confirmar el pago por Nequi y coordinar la entrega.
           </p>
-          <button className="btn-primary" onClick={() => navigate("/tienda")}>Seguir comprando</button>
+          <button className="btn-primary" onClick={() => navigate("/tienda")}>
+            Seguir comprando
+          </button>
         </div>
         <Footer />
       </main>
@@ -57,15 +120,39 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <main>
-        <div style={{ minHeight: "58vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 40 }}>
+        <div
+          style={{
+            minHeight: "58vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: 40,
+          }}
+        >
           <div style={{ marginBottom: 20, color: "var(--border)" }}>
             <BagIcon size={68} />
           </div>
-          <h2 className="serif" style={{ fontSize: 28, marginBottom: 10 }}>Tu carrito está vacío</h2>
-          <p style={{ fontSize: 14, color: "var(--muted)", fontWeight: 600, marginBottom: 26, maxWidth: 320, lineHeight: 1.7 }}>
-            Explora nuestra tienda y encuentra los productos perfectos para tu cabello.
+          <h2 className="serif" style={{ fontSize: 28, marginBottom: 10 }}>
+            Tu carrito está vacío
+          </h2>
+          <p
+            style={{
+              fontSize: 14,
+              color: "var(--muted)",
+              fontWeight: 600,
+              marginBottom: 26,
+              maxWidth: 320,
+              lineHeight: 1.7,
+            }}
+          >
+            Explora nuestra tienda y encuentra los productos perfectos para tu
+            cabello.
           </p>
-          <button className="btn-primary" onClick={() => navigate("/tienda")}>Ir a la tienda</button>
+          <button className="btn-primary" onClick={() => navigate("/tienda")}>
+            Ir a la tienda
+          </button>
         </div>
         <Footer />
       </main>
@@ -74,33 +161,137 @@ export default function Cart() {
 
   return (
     <main>
-      <div style={{ padding: "36px 40px", borderBottom: "1.5px solid var(--border)" }}>
-        <span className="tag" style={{ display: "block", marginBottom: 6 }}>Mi carrito</span>
-        <h1 className="serif" style={{ fontSize: 32, fontWeight: 400 }}>Resumen de compra</h1>
+      <div
+        style={{
+          padding: "36px 40px",
+          borderBottom: "1.5px solid var(--border)",
+        }}
+      >
+        <span className="tag" style={{ display: "block", marginBottom: 6 }}>
+          Mi carrito
+        </span>
+        <h1 className="serif" style={{ fontSize: 32, fontWeight: 400 }}>
+          Resumen de compra
+        </h1>
       </div>
 
       <div className="sec">
         <div className="grid-2-col" style={{ gap: 28, alignItems: "start" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {items.map((item) => (
-              <div key={item.id} className="card" style={{ display: "flex", gap: 16, padding: 16 }}>
-                <img src={item.img} alt={item.name} style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 12, flexShrink: 0 }} />
+              <div
+                key={item.id}
+                className="card"
+                style={{ display: "flex", gap: 16, padding: 16 }}
+              >
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    objectFit: "cover",
+                    borderRadius: 12,
+                    flexShrink: 0,
+                  }}
+                />
                 <div style={{ flex: 1 }}>
-                  <span className="tag-pink" style={{ fontSize: 10 }}>{item.catLabel}</span>
-                  <p style={{ fontSize: 14, fontWeight: 700, margin: "4px 0 3px" }}>{item.name}</p>
-                  <p style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600, marginBottom: 10 }}>{item.shortDesc}</p>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, border: "1.5px solid var(--border)", borderRadius: 50, padding: "5px 14px" }}>
-                      <button onClick={() => updateQty(item.id, item.qty - 1)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "var(--pink)", fontWeight: 700, lineHeight: 1 }}>−</button>
-                      <span style={{ fontSize: 14, fontWeight: 700 }}>{item.qty}</span>
-                      <button onClick={() => updateQty(item.id, item.qty + 1)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "var(--pink)", fontWeight: 700, lineHeight: 1 }}>+</button>
+                  <span className="tag-pink" style={{ fontSize: 10 }}>
+                    {item.catLabel}
+                  </span>
+                  <p
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 700,
+                      margin: "4px 0 3px",
+                    }}
+                  >
+                    {item.name}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: "var(--muted)",
+                      fontWeight: 600,
+                      marginBottom: 10,
+                    }}
+                  >
+                    {item.shortDesc}
+                  </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      flexWrap: "wrap",
+                      gap: 8,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        border: "1.5px solid var(--border)",
+                        borderRadius: 50,
+                        padding: "5px 14px",
+                      }}
+                    >
+                      <button
+                        onClick={() => updateQty(item.id, item.qty - 1)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          fontSize: 18,
+                          color: "var(--pink)",
+                          fontWeight: 700,
+                          lineHeight: 1,
+                        }}
+                      >
+                        −
+                      </button>
+                      <span style={{ fontSize: 14, fontWeight: 700 }}>
+                        {item.qty}
+                      </span>
+                      <button
+                        onClick={() => updateQty(item.id, item.qty + 1)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          fontSize: 18,
+                          color: "var(--pink)",
+                          fontWeight: 700,
+                          lineHeight: 1,
+                        }}
+                      >
+                        +
+                      </button>
                     </div>
-                    <span className="price" style={{ fontSize: 14 }}>{fmt(item.priceNum * item.qty)}</span>
+                    <span className="price" style={{ fontSize: 14 }}>
+                      {fmt(item.priceNum * item.qty)}
+                    </span>
                     <button
                       onClick={() => removeItem(item.id)}
-                      style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--muted)", fontWeight: 600, display: "flex", alignItems: "center", gap: 5, transition: "color 0.2s" }}
-                      onMouseOver={(e) => e.currentTarget.style.color = "var(--pink)"}
-                      onMouseOut={(e) => e.currentTarget.style.color = "var(--muted)"}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: 12,
+                        color: "var(--muted)",
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                        transition: "color 0.2s",
+                      }}
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.color = "var(--pink)")
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.color = "var(--muted)")
+                      }
                     >
                       <TrashIcon /> Eliminar
                     </button>
@@ -111,73 +302,333 @@ export default function Cart() {
 
             <button
               onClick={clearCart}
-              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--muted)", fontWeight: 600, textAlign: "left", transition: "color 0.2s" }}
-              onMouseOver={(e) => e.currentTarget.style.color = "var(--pink)"}
-              onMouseOut={(e) => e.currentTarget.style.color = "var(--muted)"}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: 12,
+                color: "var(--muted)",
+                fontWeight: 600,
+                textAlign: "left",
+                transition: "color 0.2s",
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "var(--pink)")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "var(--muted)")}
             >
               Vaciar carrito
             </button>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ background: "#fff", border: "1.5px solid var(--border)", borderRadius: 18, padding: 26 }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Resumen del pedido</p>
+            <div
+              style={{
+                background: "#fff",
+                border: "1.5px solid var(--border)",
+                borderRadius: 18,
+                padding: 26,
+              }}
+            >
+              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>
+                Resumen del pedido
+              </p>
 
               {items.map((item) => (
-                <div key={item.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, fontSize: 13, fontWeight: 600, color: "var(--muted)" }}>
-                  <span>{item.name} × {item.qty}</span>
+                <div
+                  key={item.id}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: 10,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "var(--muted)",
+                  }}
+                >
+                  <span>
+                    {item.name} × {item.qty}
+                  </span>
                   <span>{fmt(item.priceNum * item.qty)}</span>
                 </div>
               ))}
 
-              <div style={{ borderTop: "1.5px solid var(--border)", marginTop: 18, paddingTop: 18 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 600, color: "var(--muted)", marginBottom: 8 }}>
+              <div
+                style={{
+                  borderTop: "1.5px solid var(--border)",
+                  marginTop: 18,
+                  paddingTop: 18,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "var(--muted)",
+                    marginBottom: 8,
+                  }}
+                >
                   <span>Subtotal</span>
                   <span>{fmt(total)}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 600, color: "var(--teal)", marginBottom: 18 }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 6 }}><TruckIcon /> Envío</span>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "var(--teal)",
+                    marginBottom: 18,
+                  }}
+                >
+                  <span
+                    style={{ display: "flex", alignItems: "center", gap: 6 }}
+                  >
+                    <TruckIcon /> Envío
+                  </span>
                   <span>Gratis</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, fontWeight: 700 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: 18,
+                    fontWeight: 700,
+                  }}
+                >
                   <span>Total</span>
                   <span style={{ color: "var(--pink)" }}>{fmt(total)}</span>
                 </div>
               </div>
 
               {orderError && (
-                <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: "12px 16px", marginBottom: 12, fontSize: 13, fontWeight: 600, color: "#dc2626" }}>
+                <div
+                  style={{
+                    background: "#fef2f2",
+                    border: "1px solid #fecaca",
+                    borderRadius: 12,
+                    padding: "12px 16px",
+                    marginBottom: 12,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "#dc2626",
+                  }}
+                >
                   {orderError}
                 </div>
               )}
 
-              <button
-                className="btn-primary"
-                style={{ width: "100%", padding: "14px 0", fontSize: 14, marginTop: 22 }}
-                onClick={handleCheckout}
-                disabled={ordering}
-              >
-                {ordering ? "Procesando..." : "Proceder al pago"}
-              </button>
+              {showNequi ? (
+                <div
+                  style={{
+                    marginTop: 22,
+                    padding: 20,
+                    background: "var(--cream)",
+                    borderRadius: 16,
+                    border: "1.5px solid var(--border)",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      marginBottom: 14,
+                    }}
+                  >
+                    Paga con Nequi
+                  </p>
+
+                  <div
+                    style={{
+                      background: "#fff",
+                      borderRadius: 12,
+                      padding: 16,
+                      marginBottom: 14,
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "var(--muted)",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Transfiere a este número:
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 24,
+                        fontWeight: 800,
+                        letterSpacing: 2,
+                        color: "var(--teal)",
+                        marginBottom: 4,
+                      }}
+                    >
+                      {NEQUI}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: "var(--muted)",
+                      }}
+                    >
+                      Titular: {NEQUI_NAME}
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      background: "#fff",
+                      borderRadius: 12,
+                      padding: 16,
+                      marginBottom: 14,
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "var(--muted)",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Valor a transferir:
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 28,
+                        fontWeight: 800,
+                        color: "var(--pink)",
+                      }}
+                    >
+                      {fmt(total)}
+                    </p>
+                  </div>
+
+                  <ol
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "var(--muted)",
+                      lineHeight: 2,
+                      paddingLeft: 18,
+                      marginBottom: 18,
+                    }}
+                  >
+                    <li>Abre Nequi</li>
+                    <li>Selecciona "Enviar dinero"</li>
+                    <li>
+                      Ingresa el número <strong>{NEQUI}</strong>
+                    </li>
+                    <li>Digita el valor de <strong>{fmt(total)}</strong></li>
+                    <li>Confirma la transferencia</li>
+                    <li>Vuelve y presiona "Ya transferí"</li>
+                  </ol>
+
+                  <button
+                    className="btn-primary"
+                    style={{
+                      width: "100%",
+                      padding: "14px 0",
+                      fontSize: 14,
+                    }}
+                    onClick={handleNequiConfirm}
+                    disabled={ordering}
+                  >
+                    {ordering ? "Verificando..." : "Ya transferí"}
+                  </button>
+
+                  <button
+                    onClick={() => setShowNequi(false)}
+                    style={{
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: "12px 0",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "var(--muted)",
+                      marginTop: 6,
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="btn-primary"
+                  style={{
+                    width: "100%",
+                    padding: "14px 0",
+                    fontSize: 14,
+                    marginTop: 22,
+                  }}
+                  onClick={handleCheckout}
+                  disabled={ordering}
+                >
+                  {ordering ? "Procesando..." : "Proceder al pago"}
+                </button>
+              )}
 
               <a
-                href="https://wa.me/573104226967"
+                href={`https://wa.me/573104226967?text=${whatsappMsg()}`}
                 target="_blank"
                 rel="noreferrer"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center", marginTop: 14, fontSize: 13, color: "var(--teal)", fontWeight: 700, textDecoration: "none" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 7,
+                  textAlign: "center",
+                  marginTop: 14,
+                  fontSize: 13,
+                  color: "var(--teal)",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                }}
               >
                 <WhatsAppIcon /> Pedir por WhatsApp
               </a>
             </div>
 
-            <div style={{ background: "var(--cream)", borderRadius: 16, padding: 20 }}>
+            <div
+              style={{
+                background: "var(--cream)",
+                borderRadius: 16,
+                padding: 20,
+              }}
+            >
               {[
-                { icon: <TruckIcon />,  text: "Envío gratis en pedidos sobre $80.000" },
-                { icon: <CheckIcon />,  text: "Productos 100% naturales y probados"   },
-                { icon: <HeartIcon />,  text: "Garantía de satisfacción"               },
+                {
+                  icon: <TruckIcon />,
+                  text: "Envío gratis en pedidos sobre $80.000",
+                },
+                {
+                  icon: <CheckIcon />,
+                  text: "Productos 100% naturales y probados",
+                },
+                { icon: <HeartIcon />, text: "Garantía de satisfacción" },
               ].map((b) => (
-                <div key={b.text} style={{ display: "flex", gap: 10, marginBottom: 10, fontSize: 13, fontWeight: 600, color: "var(--muted)", alignItems: "center" }}>
-                  <span style={{ color: "var(--teal)", flexShrink: 0 }}>{b.icon}</span>
+                <div
+                  key={b.text}
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    marginBottom: 10,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "var(--muted)",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ color: "var(--teal)", flexShrink: 0 }}>
+                    {b.icon}
+                  </span>
                   <span>{b.text}</span>
                 </div>
               ))}
@@ -193,7 +644,16 @@ export default function Cart() {
 
 function BagIcon({ size }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
       <line x1="3" y1="6" x2="21" y2="6" />
       <path d="M16 10a4 4 0 01-8 0" />
@@ -202,7 +662,16 @@ function BagIcon({ size }) {
 }
 function TrashIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="3 6 5 6 21 6" />
       <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
     </svg>
@@ -210,7 +679,16 @@ function TrashIcon() {
 }
 function TruckIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <rect x="1" y="3" width="15" height="13" />
       <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
       <circle cx="5.5" cy="18.5" r="2.5" />
@@ -220,14 +698,29 @@ function TruckIcon() {
 }
 function CheckIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }
 function HeartIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="none"
+    >
       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
     </svg>
   );
@@ -241,7 +734,16 @@ function WhatsAppIcon() {
 }
 function CheckCircleIcon({ size }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
       <polyline points="22 4 12 14.01 9 11.01" />
     </svg>
