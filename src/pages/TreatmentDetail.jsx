@@ -23,15 +23,18 @@ export default function TreatmentDetail() {
   if (loading) {
     return (
       <main>
+        <div className="skeleton" style={{ width: "100%", height: 300, borderRadius: 0 }} />
         <div className="sec">
-          <div className="grid-2-col" style={{ gap: 40, alignItems: "start" }}>
-            <div className="skeleton" style={{ width: "100%", aspectRatio: "1/1", borderRadius: 20 }} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div className="skeleton" style={{ height: 14, width: "30%" }} />
-              <div className="skeleton" style={{ height: 26, width: "70%" }} />
-              <div className="skeleton" style={{ height: 14, width: "90%" }} />
-              <div className="skeleton" style={{ height: 14, width: "60%" }} />
-              <div className="skeleton" style={{ height: 20, width: "40%", marginTop: 10 }} />
+          <div className="grid-2-col" style={{ gap: 28 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <div className="skeleton" style={{ height: 160, width: "100%", borderRadius: 18 }} />
+              <div className="skeleton" style={{ height: 220, width: "100%", borderRadius: 18 }} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div className="skeleton" style={{ height: 200, width: "100%", borderRadius: 18 }} />
+              <div className="skeleton" style={{ height: 110, width: "100%", borderRadius: 18 }} />
+              <div className="skeleton" style={{ height: 48, width: "100%", borderRadius: 50 }} />
+              <div className="skeleton" style={{ height: 150, width: "100%", borderRadius: 18 }} />
             </div>
           </div>
         </div>

@@ -53,11 +53,15 @@ export default function Shop() {
           <div className="g3">
             {[1,2,3,4,5,6].map((i) => (
               <div key={i} className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div className="skeleton" style={{ width: "100%", aspectRatio: "1/1", borderRadius: 0 }} />
-                <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-                  <div className="skeleton" style={{ height: 12, width: "40%" }} />
-                  <div className="skeleton" style={{ height: 14, width: "80%" }} />
-                  <div className="skeleton" style={{ height: 12, width: "30%" }} />
+                <div className="skeleton" style={{ width: "100%", height: 200 }} />
+                <div style={{ padding: 18 }}>
+                  <div className="skeleton" style={{ height: 12, width: "30%", marginBottom: 6 }} />
+                  <div className="skeleton" style={{ height: 14, width: "80%", marginBottom: 4 }} />
+                  <div className="skeleton" style={{ height: 12, width: "50%", marginBottom: 14 }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div className="skeleton" style={{ height: 14, width: "22%" }} />
+                    <div className="skeleton" style={{ height: 32, width: "30%", borderRadius: 50 }} />
+                  </div>
                 </div>
               </div>
             ))}

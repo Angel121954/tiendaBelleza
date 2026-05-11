@@ -46,12 +46,18 @@ export default function Treatments() {
         {loading ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[1,2,3,4].map((i) => (
-              <div key={i} className="card" style={{ display: "flex", gap: 16, padding: 16 }}>
-                <div className="skeleton" style={{ width: 100, height: 100, borderRadius: 12, flexShrink: 0 }} />
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8, justifyContent: "center" }}>
-                  <div className="skeleton" style={{ height: 12, width: "30%" }} />
-                  <div className="skeleton" style={{ height: 16, width: "60%" }} />
-                  <div className="skeleton" style={{ height: 12, width: "90%" }} />
+              <div key={i} className="card" style={{ display: "flex", padding: 0, overflow: "hidden" }}>
+                <div className="skeleton" style={{ width: 140, flexShrink: 0, minHeight: 140 }} />
+                <div style={{ padding: "22px 26px", flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div className="skeleton" style={{ height: 12, width: "18%" }} />
+                  <div className="skeleton" style={{ height: 17, width: "50%" }} />
+                  <div className="skeleton" style={{ height: 12, width: "75%" }} />
+                  <div className="skeleton" style={{ height: 12, width: "55%" }} />
+                  <div style={{ display: "flex", alignItems: "center", gap: 22, marginTop: 8 }}>
+                    <div className="skeleton" style={{ height: 14, width: "14%" }} />
+                    <div className="skeleton" style={{ height: 14, width: "18%" }} />
+                    <div className="skeleton" style={{ height: 32, width: "18%", borderRadius: 50, marginLeft: "auto" }} />
+                  </div>
                 </div>
               </div>
             ))}

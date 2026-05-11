@@ -35,14 +35,27 @@ export default function ProductDetail() {
     return (
       <main>
         <div className="sec">
-          <div className="grid-2-col" style={{ gap: 40, alignItems: "start" }}>
-            <div className="skeleton" style={{ width: "100%", aspectRatio: "1/1", borderRadius: 20 }} />
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div className="skeleton" style={{ height: 14, width: "30%" }} />
-              <div className="skeleton" style={{ height: 26, width: "70%" }} />
-              <div className="skeleton" style={{ height: 14, width: "50%" }} />
-              <div className="skeleton" style={{ height: 40, width: "40%", marginTop: 10 }} />
-              <div className="skeleton" style={{ height: 48, width: "100%", marginTop: 10 }} />
+          <div className="product-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36 }}>
+            <div className="skeleton" style={{ width: "100%", height: 380, borderRadius: 20 }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+              <div>
+                <div className="skeleton" style={{ height: 14, width: "25%", marginBottom: 8 }} />
+                <div className="skeleton" style={{ height: 28, width: "70%", marginBottom: 6 }} />
+                <div className="skeleton" style={{ height: 12, width: "45%" }} />
+              </div>
+              <div className="skeleton" style={{ height: 30, width: "28%" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div className="skeleton" style={{ height: 12, width: "100%" }} />
+                <div className="skeleton" style={{ height: 12, width: "100%" }} />
+                <div className="skeleton" style={{ height: 12, width: "60%" }} />
+              </div>
+              <div className="skeleton" style={{ height: 80, width: "100%", borderRadius: 14 }} />
+              <div className="skeleton" style={{ height: 16, width: "45%" }} />
+              <div style={{ display: "flex", gap: 12 }}>
+                <div className="skeleton" style={{ height: 48, width: "35%", borderRadius: 50 }} />
+                <div className="skeleton" style={{ height: 48, flex: 1, borderRadius: 50 }} />
+              </div>
+              <div className="skeleton" style={{ height: 48, width: "100%", borderRadius: 50 }} />
             </div>
           </div>
         </div>

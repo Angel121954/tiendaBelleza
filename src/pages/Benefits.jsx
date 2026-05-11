@@ -74,16 +74,21 @@ export default function Benefits() {
 
       {loading ? (
         <div style={{ padding: "32px 40px" }}>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 30 }}>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 30, justifyContent: "center" }}>
             {[1,2,3,4].map((i) => (
               <div key={i} className="skeleton" style={{ height: 34, width: 100, borderRadius: 50 }} />
             ))}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div className="skeleton" style={{ height: 22, width: "40%" }} />
-            <div className="skeleton" style={{ height: 14, width: "80%" }} />
-            <div className="skeleton" style={{ height: 14, width: "60%" }} />
-            <div className="skeleton" style={{ height: 200, width: "100%", marginTop: 10 }} />
+          <div className="skeleton" style={{ height: 220, width: "100%", borderRadius: 20, marginBottom: 24 }} />
+          <div className="grid-2-col" style={{ gap: 18 }}>
+            <div className="skeleton" style={{ height: 220, width: "100%", borderRadius: 18 }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div className="skeleton" style={{ height: 150, width: "100%", borderRadius: 18 }} />
+              <div className="skeleton" style={{ height: 200, width: "100%", borderRadius: 18 }} />
+            </div>
+          </div>
+          <div style={{ textAlign: "center", marginTop: 32 }}>
+            <div className="skeleton" style={{ height: 48, width: 200, borderRadius: 50, margin: "0 auto" }} />
           </div>
         </div>
       ) : (
