@@ -188,9 +188,9 @@ function HamburgerIcon({ open }) {
   };
   return (
     <div style={{ width: 22 }}>
-      <span style={{ ...style, transform: open ? "translateY(7px) rotate(45deg)" : "none" }} />
+      <span style={{ ...style }} />
       <span style={{ ...style, opacity: open ? 0 : 1 }} />
-      <span style={{ ...style, transform: open ? "translateY(-7px) rotate(-45deg)" : "none", marginBottom: 0 }} />
+      <span style={{ ...style, marginBottom: 0 }} />
     </div>
   );
 }

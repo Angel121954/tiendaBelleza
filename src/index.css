@@ -46,10 +46,6 @@ body {
   box-shadow: 0 2px 14px rgba(232, 99, 138, 0.28);
 }
 
-.btn-primary:hover {
-  box-shadow: 0 6px 24px rgba(232, 99, 138, 0.42);
-}
-
 .btn-teal {
   background: linear-gradient(135deg, #4dbfbf 0%, #39aaa8 100%);
   color: #fff;
@@ -60,13 +56,8 @@ body {
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.15s;
+  transition: box-shadow 0.2s;
   box-shadow: 0 2px 12px rgba(77, 191, 191, 0.25);
-}
-
-.btn-teal:hover {
-  box-shadow: 0 5px 20px rgba(77, 191, 191, 0.40);
-  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -117,10 +108,6 @@ body {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
-.btn-white:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.20);
-}
-
 /* ── TAGS ── */
 .tag {
   font-size: 11px;
@@ -144,12 +131,7 @@ body {
   border: 1.5px solid var(--border);
   border-radius: 18px;
   overflow: hidden;
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-.card:hover {
-  box-shadow: 0 12px 40px rgba(61, 32, 53, 0.10);
-  transform: translateY(-3px);
+  transition: box-shadow 0.25s ease;
 }
 
 .sec {
