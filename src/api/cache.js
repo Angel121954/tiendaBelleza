@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "pc_cache_";
-const TTL = 60 * 1000;
+const TTL = 3 * 60 * 1000;
 
 function cacheKey(url) {
   let k = url;
