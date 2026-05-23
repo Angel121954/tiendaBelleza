@@ -177,20 +177,21 @@ function CartBtn({ count }) {
 }
 
 function HamburgerIcon({ open }) {
-  const style = {
+  const b = {
     display: "block",
     width: 22,
     height: 2,
     background: "var(--dark)",
     borderRadius: 2,
     transition: "all 0.3s",
-    marginBottom: 5,
+    position: "absolute",
+    left: 0,
   };
   return (
-    <div style={{ width: 22 }}>
-      <span style={{ ...style }} />
-      <span style={{ ...style, opacity: open ? 0 : 1 }} />
-      <span style={{ ...style, marginBottom: 0 }} />
+    <div style={{ width: 22, height: 16, position: "relative" }}>
+      <span style={{ ...b, top: open ? 7 : 0, transform: open ? "rotate(45deg)" : "rotate(0)" }} />
+      <span style={{ ...b, top: 7, opacity: open ? 0 : 1 }} />
+      <span style={{ ...b, top: open ? 7 : 14, transform: open ? "rotate(-45deg)" : "rotate(0)" }} />
     </div>
   );
 }
