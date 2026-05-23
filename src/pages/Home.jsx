@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <main>
-      <div style={{ position: "relative", minHeight: 580, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+      <div style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
         <img
           src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1600&q=90&fit=crop&crop=center"
           alt="Tratamiento capilar profesional"
@@ -58,7 +58,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 48, flexWrap: "wrap" }}>
+          {/* <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 48, flexWrap: "wrap" }}>
             {[
               { val: "+500", label: "Clientas felices", color: "var(--pink)" },
               { val: "98%",  label: "Satisfacción",     color: "var(--teal)" },
@@ -70,7 +70,7 @@ export default function Home() {
                 <p style={{ fontSize: 10, color: "var(--muted)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginTop: 2 }}>{s.label}</p>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 

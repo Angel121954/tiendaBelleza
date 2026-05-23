@@ -28,3 +28,6 @@ dist-ssr
 
 # notas de deploy locales
 email.md
+
+# agrego de valores en el plugin wordpress
+wordpress-data-guide.md
