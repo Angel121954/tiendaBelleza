@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "pc_cache_";
-const TTL = 3 * 60 * 1000;
+const TTL = 5 * 60 * 1000;
 
 function cacheKey(url) {
   let k = url;
@@ -29,5 +29,5 @@ export function setCache(url, data) {
       CACHE_PREFIX + cacheKey(url),
       JSON.stringify({ data, ts: Date.now() })
     );
-  } catch {}
+  } catch { }
 }
